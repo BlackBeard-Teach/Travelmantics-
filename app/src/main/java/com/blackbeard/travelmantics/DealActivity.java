@@ -46,7 +46,7 @@ public class DealActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.txtTitle);
         txtDescription = findViewById(R.id.txtDescription);
         txtPrice = findViewById(R.id.txtPrice);
-        imageView = findViewById(R.id.imageDeal);
+        imageView = findViewById(R.id.image);
         Intent intent = getIntent();
         TravelDeals deals = (TravelDeals) intent.getSerializableExtra("Deal");
         if (deals == null)
@@ -57,6 +57,7 @@ public class DealActivity extends AppCompatActivity {
         txtTitle.setText(deals.getTitle());
         txtDescription.setText(deals.getDescription());
         txtPrice.setText(deals.getPrice());
+        showImage(deals.getImageUrl());
         Button btnImage = findViewById(R.id.btnImage);
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
