@@ -34,7 +34,7 @@ public class DealActivity extends AppCompatActivity {
     EditText txtDescription;
     EditText txtPrice;
     ImageView imageView;
-    TravelDeals deal;
+    TravelDeal deal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +48,10 @@ public class DealActivity extends AppCompatActivity {
         txtPrice = findViewById(R.id.txtPrice);
         imageView = findViewById(R.id.image);
         Intent intent = getIntent();
-        TravelDeals deals = (TravelDeals) intent.getSerializableExtra("Deal");
+        TravelDeal deals = (TravelDeal) intent.getSerializableExtra("Deal");
         if (deals == null)
         {
-            deals = new TravelDeals();
+            deals = new TravelDeal();
         }
         this.deal = deals;
         txtTitle.setText(deals.getTitle());
@@ -115,11 +115,11 @@ public class DealActivity extends AppCompatActivity {
         if (requestCode == PICTURE_RESULT && resultCode == RESULT_OK)
         {
             Uri imageUri = data.getData();
-            StorageReference reference = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
+            final StorageReference reference = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
             reference.putFile(imageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    String url = reference.getDownloadUrl().toString();//taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
                     String pictureName = taskSnapshot.getStorage().getPath();
                     deal.setImageUrl(url);
                     deal.setImageName(pictureName);
@@ -128,11 +128,12 @@ public class DealActivity extends AppCompatActivity {
                     showImage(url);
                 }
             });
+
         }
     }
 
     private void showImage(String url) {
-        if (url != null && !url.isEmpty())
+        if (url != null && url.isEmpty() == false)
         {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             Picasso.with(this)

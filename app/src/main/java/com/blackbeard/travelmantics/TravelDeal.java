@@ -2,7 +2,7 @@ package com.blackbeard.travelmantics;
 
 import java.io.Serializable;
 
-public class TravelDeals implements Serializable {
+public class TravelDeal implements Serializable {
     private String id;
     private String title;
     private String description;
@@ -10,10 +10,10 @@ public class TravelDeals implements Serializable {
     private String imageUrl;
     private String imageName;
 
-    public TravelDeals() {
+    public TravelDeal() {
     }
 
-    public TravelDeals(String title, String description, String price, String imageUrl, String imageName) {
+    public TravelDeal(String title, String description, String price, String imageUrl, String imageName) {
         this.setId(id);
         this.setTitle(title);
         this.setDescription(description);

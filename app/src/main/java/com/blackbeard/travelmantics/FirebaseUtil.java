@@ -28,7 +28,7 @@ public class FirebaseUtil {
     public static FirebaseStorage mStorage;
     public static StorageReference mStorageRef;
     public static FirebaseAuth.AuthStateListener mAuthListener;
-    public static ArrayList<TravelDeals> mDeals;
+    public static ArrayList<TravelDeal> mDeals;
     private static final int RC_SIGN_IN = 123;
     private static ListActivity caller;
     public static boolean isAdmin;
@@ -60,7 +60,7 @@ public class FirebaseUtil {
             };
             connectStorage();
         }
-        mDeals = new ArrayList<TravelDeals>();
+        mDeals = new ArrayList<TravelDeal>();
         mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
     }
 

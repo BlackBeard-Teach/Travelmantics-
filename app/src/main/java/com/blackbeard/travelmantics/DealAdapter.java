@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder> {
-    ArrayList<TravelDeals> deals;
+    ArrayList<TravelDeal> deals;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildListener;
@@ -36,7 +36,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         mChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                TravelDeals td = dataSnapshot.getValue(TravelDeals.class);
+                TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
                 Log.d("Deal:", td.getTitle());
                 td.setId(dataSnapshot.getKey());
                 deals.add(td);
@@ -76,8 +76,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-        TravelDeals travelDeals = deals.get(position);
-        holder.bind(travelDeals);
+        TravelDeal travelDeal = deals.get(position);
+        holder.bind(travelDeal);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-            imageDeal = itemView.findViewById(R.id.imageDeal);
+            imageDeal = (ImageView) itemView.findViewById(R.id.imageDeal);
             itemView.setOnClickListener(this);
         }
 
@@ -103,17 +103,17 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         public void onClick(View view) {
             int position  = getAdapterPosition();
             Log.d("Click", String.valueOf(position));
-            TravelDeals selectedDeal = deals.get(position);
+            TravelDeal selectedDeal = deals.get(position);
             Intent intent = new Intent(view.getContext(), DealActivity.class);
             intent.putExtra("Deal", selectedDeal);
             view.getContext().startActivity(intent);
         }
 
-        public void bind(TravelDeals travelDeals) {
-            tvTitle.setText(travelDeals.getTitle());
-            tvDescription.setText(travelDeals.getDescription());
-            tvPrice.setText(travelDeals.getPrice());
-            showImage(travelDeals.getImageUrl());
+        public void bind(TravelDeal travelDeal) {
+            tvTitle.setText(travelDeal.getTitle());
+            tvDescription.setText(travelDeal.getDescription());
+            tvPrice.setText(travelDeal.getPrice());
+            showImage(travelDeal.getImageUrl());
         }
 
         private void showImage(String imageUrl) {
