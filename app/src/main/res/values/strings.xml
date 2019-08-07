@@ -8,4 +8,5 @@
     <string name="delete_deal">Delete Deal</string>
     <string name="save_menu">Save</string>
     <string name="upload_image">Upload Image</string>
+    <string name="hotel_view">Hotel View</string>
 </resources>

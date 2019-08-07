@@ -30,54 +30,56 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
     private ImageView imageDeal;
 
     public DealAdapter() {
+        //FirebaseUtil.openFbReference("traveldeals");
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
         this.deals = FirebaseUtil.mDeals;
         mChildListener = new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
-                Log.d("Deal:", td.getTitle());
+                Log.d("Deal: ", td.getTitle());
                 td.setId(dataSnapshot.getKey());
                 deals.add(td);
-                notifyItemInserted(deals.size() - 1);
+                notifyItemInserted(deals.size()-1);
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
             }
 
             @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         };
         mDatabaseReference.addChildEventListener(mChildListener);
     }
 
-    @NonNull
     @Override
-    public DealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View itemView = LayoutInflater.from(context).inflate(R.layout.rv_row, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.rv_row, parent, false);
         return new DealViewHolder(itemView);
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-        TravelDeal travelDeal = deals.get(position);
-        holder.bind(travelDeal);
+    public void onBindViewHolder(DealViewHolder holder, int position) {
+        TravelDeal deal = deals.get(position);
+        holder.bind(deal);
     }
 
     @Override
@@ -90,18 +92,25 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         TextView tvDescription;
         TextView tvPrice;
 
-        public DealViewHolder(@NonNull View itemView) {
+        public DealViewHolder(View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvPrice = itemView.findViewById(R.id.tvPrice);
+            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
             imageDeal = (ImageView) itemView.findViewById(R.id.imageDeal);
             itemView.setOnClickListener(this);
         }
 
+        public void bind(TravelDeal deal) {
+            tvTitle.setText(deal.getTitle());
+            tvDescription.setText(deal.getDescription());
+            tvPrice.setText(deal.getPrice());
+            showImage(deal.getImageUrl());
+        }
+
         @Override
         public void onClick(View view) {
-            int position  = getAdapterPosition();
+            int position = getAdapterPosition();
             Log.d("Click", String.valueOf(position));
             TravelDeal selectedDeal = deals.get(position);
             Intent intent = new Intent(view.getContext(), DealActivity.class);
@@ -109,19 +118,11 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             view.getContext().startActivity(intent);
         }
 
-        public void bind(TravelDeal travelDeal) {
-            tvTitle.setText(travelDeal.getTitle());
-            tvDescription.setText(travelDeal.getDescription());
-            tvPrice.setText(travelDeal.getPrice());
-            showImage(travelDeal.getImageUrl());
-        }
-
-        private void showImage(String imageUrl) {
-            if (imageUrl != null && !imageUrl.isEmpty())
-            {
+        private void showImage(String url) {
+            if (url != null && url.isEmpty()==false) {
                 Picasso.with(imageDeal.getContext())
-                        .load(imageUrl)
-                        .resize(160, 160)
+                        .load(url)
+                        .resize(600, 300)
                         .centerCrop()
                         .into(imageDeal);
             }
